@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>图书管理</title>
+    <meta name="description" content="图书管理">
+    <meta name="keywords" content="图书管理">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../plugins/echarts/echarts.js"></script>
+    <link rel="stylesheet" href="../plugins/elementui/index.css">
+    <link rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.min.css">
+</head>
+<body class="hold-transition">
+<div id="app">
+    <div class="content-header">
+        <h1>统计分析<small>分布占比</small></h1>
+        <el-breadcrumb separator-class="el-icon-arrow-right" class="breadcrumb">
+            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item>统计分析</el-breadcrumb-item>
+            <el-breadcrumb-item>书籍种类占比</el-breadcrumb-item>
+        </el-breadcrumb>
+    </div>
+    <div class="app-container">
+        <div class="box">
+            <div id="chart1" style="height:600px;"></div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="../js/vue.js"></script>
+<script src="../js/axios-0.18.0.js"></script>
+<script type="text/javascript">
+    var myChart1 = echarts.init(document.getElementById('chart1'));
+
+    axios.post("/books/EcharsShowAdmin").then((res) => {
+        console.log('后端返回的数据:', res.data);
+
+        var setmealNames = res.data.data.setmealNames;
+        var bookTypeCounts = res.data.data.bookTypeCounts;
+
+        // 格式化数据为ECharts所需的格式
+        var seriesData = bookTypeCounts.map((item) => {
+            return {
+                name: item.type,
+                value: item.count
+            };
+        });
+
+        myChart1.setOption({
+            title: {
+                text: '书籍种类占比',
+                subtext: '',
+                x: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+                data: setmealNames
+            },
+            series: [
+                {
+                    name: '书籍种类占比',
+                    type: 'pie',
+                    radius: '55%',
+                    center: ['50%', '60%'],
+                    data: seriesData,
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        });
+    }).catch((error) => {
+        console.error('请求图书种类占比数据失败:', error);
+    });
+</script>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>图书管理</title>
+    <meta name="description" content="图书管理">
+    <meta name="keywords" content="图书管理">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../plugins/elementui/index.css">
+    <link rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="hold-transition">
+<div id="app">
+    <div class="content-header">
+        <h1>图书管理<small>图书列表</small></h1>
+        <el-breadcrumb separator-class="el-icon-arrow-right" class="breadcrumb">
+            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item>图书管理</el-breadcrumb-item>
+            <el-breadcrumb-item>图书列表</el-breadcrumb-item>
+        </el-breadcrumb>
+    </div>
+    <div class="app-container">
+        <div class="box">
+            <div class="filter-container">
+                <el-input placeholder="图书名称" v-model="pagination.name" style="width: 200px;" class="filter-item"></el-input>
+                <el-button @click="getAll()" class="dalfBut">查询</el-button>
+                <el-button type="primary" class="butT" @click="handleCreate()">新建</el-button>
+            </div>
+            <el-table size="small" :data="dataList" stripe highlight-current-row>
+                <el-table-column type="index" align="center" label="序号"></el-table-column>
+                <el-table-column prop="image" label="图片" align="center">
+                    <template slot-scope="scope">
+                        <img :src="getImageUrl(scope.row.image)" alt="书籍图片" style="width: 100px; height: auto;">
+                    </template>
+                </el-table-column>
+                <el-table-column prop="name" label="图书名称" align="center"></el-table-column>
+                <el-table-column prop="type" label="类别" align="center"></el-table-column>
+                <el-table-column prop="description" label="图书简介" align="center"></el-table-column>
+                <el-table-column label="操作" align="center">
+                    <template slot-scope="scope">
+                        <el-button round size="mini" type="success" @click="handleLend(scope.row)">借阅</el-button>
+                        <el-button round type="primary" size="mini" @click="handleCollect(scope.row)">收藏</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div class="pagination-container">
+                <el-pagination
+                        class="pagination"
+                        @current-change="handleCurrentChange"
+                        :current-page="pagination.currentPage"
+                        :page-size="pagination.pageSize"
+                        :page-sizes="[5, 10, 20]"
+                        layout="total, prev, pager, next, jumper"
+                        :total="pagination.total">
+                </el-pagination>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增图书弹层 -->
+    <el-dialog title="新增图书" :visible.sync="dialogFormVisible">
+        <el-form ref="dataAddForm" :model="formData" :rules="rules" label-position="right" label-width="100px">
+            <el-form-item label="图书名称" prop="name">
+                <el-input v-model="formData.name"></el-input>
+            </el-form-item>
+            <el-form-item label="类别" prop="type">
+                <el-input v-model="formData.type"></el-input>
+            </el-form-item>
+            <el-form-item label="简介" prop="description">
+                <el-input type="textarea" v-model="formData.description"></el-input>
+            </el-form-item>
+            <el-form-item label="图片" prop="image">
+                <input type="file" @change="handleFileChange" />
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取消</el-button>
+            <el-button type="primary" @click="handleAdd()">确定</el-button>
+        </div>
+    </el-dialog>
+</div>
+<script src="../js/vue.js"></script>
+<script src="../plugins/elementui/index.js"></script>
+<script src="../js/axios-0.18.0.js"></script>
+<script src="../js/booklist.js"></script>
+</body>
+</html>

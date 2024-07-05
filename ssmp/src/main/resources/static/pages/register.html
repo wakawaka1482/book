@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>注册 </title>
+  <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+</head>
+<!-- 引入样式 -->
+<link rel="stylesheet" href="../plugins/elementui/index.css">
+<link rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="../css/style1.css">
+<link rel="stylesheet" type="text/css" href="../css/verify.css">
+<body>
+<div id="app">
+  <div class="wrap">
+    <div>
+      <div style="width: 100%; height: 100vh; overflow: hidden">
+        <div style="width: 400px; margin: 100px auto">
+          <div style="font-size: 30px; text-align: center; padding: 30px 0">欢迎注册</div>
+          <el-form ref="form" :model="form" size="normal" :rules="rules">
+            <el-form-item prop="username">
+              <el-input prefix-icon="el-icon-edit" placeholder="请输入用户名" v-model="form.username"></el-input>
+            </el-form-item>
+
+            <el-form-item prop="phone">
+              <el-input prefix-icon="el-icon-edit" placeholder="请输入手机号" v-model="form.phone"></el-input>
+            </el-form-item>
+            <el-form-item prop="sex">
+              <el-col :span="11">
+                <el-select v-model="form.sex" placeholder="请选择性别">
+                  <el-option label="未知" value="未知"></el-option>
+                  <el-option label="男" value="男"></el-option>
+                  <el-option label="女" value="女"></el-option>
+                </el-select>
+              </el-col>
+            </el-form-item>
+            <el-form-item prop="password">
+              <el-input prefix-icon="el-icon-edit" placeholder="请输入密码" v-model="form.password" type="password"></el-input>
+            </el-form-item>
+            <el-form-item prop="confirm">
+              <el-input prefix-icon="el-icon-edit" placeholder="请确认密码" v-model="form.confirm" type="password"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button style="width: 100%" type="primary" @click="register">注册</el-button>
+            </el-form-item>
+            <el-form-item><el-button type="text" @click="judgeURL">&lt;&lt;返回登录 </el-button></el-form-item>
+          </el-form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+<!-- 引入组件库 -->
+<script src="../js/vue.js"></script>
+<script src="../plugins/elementui/index.js"></script>
+<script type="text/javascript" src="../js/jquery.min.js"></script>
+<script src="../js/axios-0.18.0.js"></script>
+
+<script>
+  var vue = new Vue({
+    el: '#app',
+    data() {
+      return {
+        form: {
+          username: '',
+          phone: '',
+          sex: '',
+          password: '',
+          confirm: ''
+        },
+        rules: {
+          username: [
+            {required: true, message: '用户名不可为空', trigger: 'blur'},
+          ],
+          password: [
+            {required: true, message: '密码不可为空', trigger: 'blur'},
+          ],
+          confirm: [
+            {required: true, message: '请确认密码', trigger: 'blur'},
+          ],
+          phone: [
+            {required: true, message: '手机号不可为空', trigger: 'blur'},
+            {min: 11, max: 11, message: '长度为11个字符', trigger: 'blur'}
+          ],
+          sex: [
+            {required: true, message: '请选择性别', trigger: 'change'}
+          ]
+        }
+      }
+    },
+    mounted() {},
+    methods: {
+      register() {
+        if (this.form.password !== this.form.confirm) {
+          this.$message({
+            type: "error",
+            message: '2次密码输入不一致！'
+          });
+          return;
+        }
+
+        this.$refs['form'].validate((valid) => {
+          if (valid) {
+            axios.post("/auth/register", this.form).then(res => {
+              if (res.data.flag) {
+                this.$message({
+                  type: 'success',
+                  message: res.data.msg
+                });
+                this.$confirm('是否跳转到登录页面?', '注册成功', {
+                  confirmButtonText: '确定',
+                  cancelButtonText: '取消',
+                  type: 'warning'
+                }).then(() => {
+                  window.location.href = "./login.html";
+                }).catch(() => {
+                  this.$message({
+                    type: 'info',
+                    message: '已取消跳转'
+                  });
+                });
+              } else {
+                this.$message({
+                  type: "error",
+                  message: res.data.msg
+                });
+              }
+            }).catch(error => {
+              this.$message({
+                type: "error",
+                message: "注册失败，请稍后重试"
+              });
+            });
+          }
+        });
+      },
+      judgeURL() {
+        window.location.href = "./login.html";
+      }
+    }
+  });
+</script>
+
+<script>
+  // 下雨特效
+  function rainAnimation(time) {
+    setInterval(() => {
+      var rain = document.createElement("div");
+      rain.style.position = "fixed";
+      rain.style.height = "45px";
+      rain.style.width = "2px";
+      rain.style.backgroundColor = "#fff";
+      rain.style.filter = "blur(1px)";
+      rain.style.top = "0";
+      rain.style.left = Math.random() * 1920 + "px";
+      rain.style.opacity = parseInt(Math.random() * 10) / 10 + "";
+      document.body.appendChild(rain);
+      var timer = setInterval(() => {
+        var height = parseInt(rain.style.top);
+        var i = 1;
+        i++;
+        rain.style.top = height + 5 * Math.pow(i, 2) + "px";
+        if (rain.style.top >= "900px") {
+          clearInterval(timer);
+          rain.parentNode.removeChild(rain);
+        }
+      }, time);
+    });
+  }
+  rainAnimation(12);
+</script>
+
+</html>

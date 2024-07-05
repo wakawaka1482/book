@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+  <title>图表</title>
+  <script src="../js/jquery.min.js" ></script>
+  <script src="../plugins/echarts/echarts.js"></script>
+  <script src="../js/Echars.js"></script>
+  <link rel="stylesheet" href="../plugins/elementui/index.css">
+  <link rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="hold-transition">
+<div id="app">
+  <div class="content-header">
+    <h1>统计分析<small>数量排行</small></h1>
+    <el-breadcrumb separator-class="el-icon-arrow-right" class="breadcrumb">
+      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item>统计分析</el-breadcrumb-item>
+      <el-breadcrumb-item>书籍分类</el-breadcrumb-item>
+    </el-breadcrumb>
+  </div>
+  <div class="app-container">
+    <div class="box">
+      <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+      <div id="main" style="width: 1000px;height:450px;"></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

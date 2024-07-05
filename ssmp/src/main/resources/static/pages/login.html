@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>图书管理系统</title>
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <style>
+        body {
+            background: url(https://api.lyiqk.cn/acg) no-repeat;
+            background-size: 100%;
+        }
+        .homepage-hero-module,
+        .video-container {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .video-container .poster img {
+            z-index: 0;
+            position: absolute;
+        }
+        .video-container .filter {
+            z-index: 1;
+            position: absolute;
+            width: 100%;
+        }
+        .fillWidth {
+            width: 100%;
+        }
+    </style>
+    <link rel="stylesheet" href="../plugins/elementui/index.css">
+    <link rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/style1.css">
+    <link rel="stylesheet" type="text/css" href="../css/verify.css">
+</head>
+<body>
+<div id="app">
+    <div class="homepage-hero-module">
+        <div class="video-container">
+            <div :style="fixStyle" class="filter">
+                <div style="width: 400px; margin: 100px auto">
+                    <div style="font-size: 30px; text-align: center; padding: 30px 0; color: #333">欢迎登录</div>
+                    <el-form ref="form" :model="form" size="normal" :rules="rules" id="loginForm">
+                        <el-form-item prop="username">
+                            <el-input prefix-icon="el-icon-edit" v-model="form.username" placeholder="请输入账号"></el-input>
+                        </el-form-item>
+                        <el-form-item prop="password">
+                            <el-input prefix-icon="el-icon-edit" type="password" v-model="form.password" placeholder="请输入密码"></el-input>
+                        </el-form-item>
+                        <!-- 验证码元素 -->
+                        <div id="mpanel3"></div>
+                        <el-form-item>
+                            <el-button style="width: 100%" id="check-btn2" type="primary" @click="login">登 录</el-button>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button style="float: left" type="text" id="registerButton" @click="judgeURL">前往注册 >> </el-button>
+                        </el-form-item>
+                    </el-form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../js/vue.js"></script>
+<script src="../js/index.js"></script>
+<script type="text/javascript" src="../js/jquery.min.js"></script>
+<script src="../js/axios-0.18.0.js"></script>
+<script type="text/javascript" src="../js/verify.js"></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+
+<script src="../js/login.js"></script>
+</body>
+</html>
