@@ -3,7 +3,7 @@ package com.example.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.dao.User;
+import com.example.entity.User;
 import com.example.mapper.UserMapper;
 import com.example.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;

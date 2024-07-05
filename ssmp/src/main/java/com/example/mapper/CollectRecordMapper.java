@@ -1,7 +1,7 @@
 package com.example.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.dao.CollectRecord;
+import com.example.entity.CollectRecord;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

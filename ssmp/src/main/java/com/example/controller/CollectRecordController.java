@@ -1,7 +1,7 @@
 package com.example.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.example.dao.CollectRecord;
+import com.example.entity.CollectRecord;
 import com.example.dto.PaginationRequest;
 import com.example.dto.CollectRecordDTO;
 import com.example.service.CollectRecordService;

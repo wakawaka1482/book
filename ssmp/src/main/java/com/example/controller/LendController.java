@@ -1,6 +1,6 @@
 package com.example.controller;
 
-import com.example.dao.LendRecord;
+import com.example.entity.LendRecord;
 import com.example.dto.LendRecordDTO;
 import com.example.mapper.BookMapper;
 import com.example.service.LendService;

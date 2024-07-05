@@ -1,7 +1,7 @@
 package com.example.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.example.dao.Book;
+import com.example.entity.Book;
 import com.example.dto.BookTypeCount;
 import com.example.service.IBookService;
 import com.example.utils.R;

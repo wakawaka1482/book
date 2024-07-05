@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.dao.*;
+import com.example.entity.*;
 import com.example.dto.CollectRecordDTO;
 import com.example.dto.PaginationRequest;
 import com.example.mapper.CollectRecordMapper;

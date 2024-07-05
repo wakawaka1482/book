@@ -1,6 +1,6 @@
 package com.example.service;
 
-import com.example.dao.LendRecord;
+import com.example.entity.LendRecord;
 
 import java.time.LocalDateTime;
 import java.util.List;

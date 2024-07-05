@@ -2,9 +2,7 @@ package com.example.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.example.dao.User;
-
-import java.util.List;
+import com.example.entity.User;
 
 public interface AuthService extends IService<User> {
     boolean authenticate(String username, String password);

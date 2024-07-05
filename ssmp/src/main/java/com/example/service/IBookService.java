@@ -2,7 +2,7 @@ package com.example.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.example.dao.Book;
+import com.example.entity.Book;
 import com.example.dto.BookTypeCount;
 
 import java.util.List;

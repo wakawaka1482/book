@@ -1,7 +1,7 @@
 package com.example.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.example.dao.User;
+import com.example.entity.User;
 import com.example.dto.AuthRequest;
 import com.example.dto.PaginationDTO;
 import com.example.handler.AuthHandler;

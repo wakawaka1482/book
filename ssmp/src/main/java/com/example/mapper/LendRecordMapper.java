@@ -1,6 +1,6 @@
 package com.example.mapper;
 
-import com.example.dao.LendRecord;
+import com.example.entity.LendRecord;
 import org.apache.ibatis.annotations.*;
 
 import java.time.LocalDateTime;
