@@ -14,4 +14,6 @@ public interface IBookService extends IService<Book> {
     List<Book> searchBooks(String name, String type, String description);
 
     List<BookTypeCount> getBookTypeCounts();
+
+    boolean updateById(Book book);
 }

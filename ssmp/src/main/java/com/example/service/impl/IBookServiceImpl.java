@@ -44,6 +44,12 @@ public class IBookServiceImpl extends ServiceImpl<BookMapper, Book> implements I
 
     @Override
     public List<BookTypeCount> getBookTypeCounts() {
+
         return bookMapper.countBooksByType();
+    }
+
+    @Override
+    public boolean updateById(Book book) {
+        return this.baseMapper.updateById(book) > 0;
     }
 }

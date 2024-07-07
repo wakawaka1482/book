@@ -1,8 +1,10 @@
 package com.example.controller;
 
+import com.example.entity.Book;
 import com.example.entity.LendRecord;
 import com.example.dto.LendRecordDTO;
 import com.example.mapper.BookMapper;
+import com.example.service.IBookService;
 import com.example.service.LendService;
 import com.example.mapper.UserMapper;
 import com.example.utils.R;
@@ -24,6 +26,9 @@ public class LendController {
 
     @Autowired
     private LendService lendService;
+
+    @Autowired
+    private IBookService bookService;
 
     @Autowired
     private BookMapper bookMapper;
@@ -128,11 +133,21 @@ public class LendController {
         try {
             boolean success = lendService.addLendRecord(lendRecord);
             if (success) {
+                // 更新图书数量
+                Book book = bookService.getById(lendRecord.getBookid());
+                if (book != null) {
+                    book.setNumber(book.getNumber() - 1);
+                    boolean updateSuccess = bookService.updateById(book);
+                    if (!updateSuccess) {
+                        throw new RuntimeException("图书数量更新失败");
+                    }
+                }
                 return new R(true, "借阅记录添加成功");
             } else {
                 return new R(false, "借阅记录添加失败");
             }
         } catch (Exception e) {
+            e.printStackTrace(); // 打印堆栈跟踪以进行调试
             return new R(false, "添加借阅记录失败: " + e.getMessage());
         }
     }
