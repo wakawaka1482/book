@@ -113,11 +113,16 @@ vue = new Vue({
                             message: res.data.message || '借阅成功'
                         });
                     } else {
-                        this.$message.error(res.data.message);
+                        this.$message({
+                            type:'false',
+                            message:res.data.message||'借阅图书失败：书籍数量为0'
+                        });
                     }
-                })
-            }).finally(()=>{
-                this.getAll();
+                }).catch(error => {
+                    this.$message.error('借阅图书失败：书籍数量为0');
+                });
+            }).catch(error => {
+                this.$message.error('获取用户ID失败');
             });
         },
         handleCollect(row) {
