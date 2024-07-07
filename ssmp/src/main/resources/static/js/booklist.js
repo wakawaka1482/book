@@ -99,13 +99,31 @@ vue = new Vue({
             this.dialogFormVisible4Edit = false;
             this.$message.info("操作取消");
         },
+        getEastEightZoneTime() {
+            const currentDate = new Date();
+            const offset = currentDate.getTimezoneOffset();
+            const cstDate = new Date(currentDate.getTime() + (offset + 480) * 60000);
+
+            // 格式化为字符串
+            const year = cstDate.getFullYear();
+            const month = String(cstDate.getMonth() + 1).padStart(2, '0');
+            const day = String(cstDate.getDate()).padStart(2, '0');
+            const hours = String(cstDate.getHours()).padStart(2, '0');
+            const minutes = String(cstDate.getMinutes()).padStart(2, '0');
+            const seconds = String(cstDate.getSeconds()).padStart(2, '0');
+            return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+        },
         handleLend(row) {
-            console.log('row 对象:', row);
             this.getUserId().then(userId => {
+                if (row.number <= 0) {
+                    this.$message.error('借阅图书失败：书籍数量为0');
+                    return;
+                }
+                const lendtime = this.getEastEightZoneTime();
                 axios.post("/lend/add", {
                     bookid: row.id,
                     userid: userId,
-                    lendtime:new Date().toISOString()
+                    lendtime: lendtime
                 }).then((res) => {
                     if (res.data.flag) {
                         this.$message({
@@ -114,12 +132,12 @@ vue = new Vue({
                         });
                     } else {
                         this.$message({
-                            type:'false',
-                            message:res.data.message||'借阅图书失败：书籍数量为0'
+                            type: 'error',
+                            message: res.data.message || '借阅图书失败'
                         });
                     }
                 }).catch(error => {
-                    this.$message.error('借阅图书失败：书籍数量为0');
+                    this.$message.error('借阅图书失败');
                 });
             }).catch(error => {
                 this.$message.error('获取用户ID失败');
@@ -137,21 +155,7 @@ vue = new Vue({
                     if (res.data.flag && res.data.data.length > 0) {
                         const bookId = res.data.data[0].id;
                         if (userId && bookId) {
-                            // 获取当前时间并调整为东八区时间
-                            const currentDate = new Date();
-                            const offset = currentDate.getTimezoneOffset();
-                            const cstDate = new Date(currentDate.getTime() + (offset + 480) * 60000);
-
-                            // 格式化为字符串
-                            const year = cstDate.getFullYear();
-                            const month = String(cstDate.getMonth() + 1).padStart(2, '0');
-                            const day = String(cstDate.getDate()).padStart(2, '0');
-                            const hours = String(cstDate.getHours()).padStart(2, '0');
-                            const minutes = String(cstDate.getMinutes()).padStart(2, '0');
-                            const seconds = String(cstDate.getSeconds()).padStart(2, '0');
-                            const lenddate = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
-
-                            console.log(`用户ID: ${userId}, 图书ID: ${bookId}, 当前时间: ${lenddate}`);
+                            const lenddate = this.getEastEightZoneTime();
 
                             axios.post("/collect/add", {
                                 bookid: bookId,
@@ -168,7 +172,6 @@ vue = new Vue({
                                 }
                             }).catch(error => {
                                 this.$message.error('收藏图书失败');
-                                console.error(error);
                             });
                         } else {
                             this.$message.error('无效的用户ID或图书ID');
@@ -178,11 +181,9 @@ vue = new Vue({
                     }
                 }).catch(error => {
                     this.$message.error('搜索图书失败');
-                    console.error('搜索图书失败:', error);
                 });
             }).catch(error => {
                 this.$message.error('获取用户ID失败');
-                console.error('获取用户ID失败', error);
             });
         },
         handleCurrentChange(currentPage) {
@@ -208,22 +209,17 @@ vue = new Vue({
                     .then(res => {
                         console.log('响应数据:', res);
                         if (res.status === 200 && res.data.flag) {
-                            console.log('获取用户ID成功:', res.data.data);
                             resolve(res.data.data);
                         } else {
-                            console.error('获取用户ID失败:', res.data.msg || '未知错误');
                             reject(res.data.msg || '未知错误');
                         }
                     })
                     .catch(error => {
                         if (error.response) {
-                            console.error(`获取用户ID时出错: ${error.response.status} - ${error.response.statusText}`);
                             reject(`请求失败，状态码: ${error.response.status}`);
                         } else if (error.request) {
-                            console.error('获取用户ID时出错: 没有收到响应');
                             reject('请求失败，服务器无响应');
                         } else {
-                            console.error('获取用户ID时出错:', error.message);
                             reject(`请求失败: ${error.message}`);
                         }
                     });
