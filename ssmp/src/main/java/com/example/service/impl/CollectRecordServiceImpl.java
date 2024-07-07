@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -63,11 +64,10 @@ public class CollectRecordServiceImpl extends ServiceImpl<CollectRecordMapper, C
             String username = userMapper.findUsernameByUserId(record.getUserid());
             byte[] imageBytes = book.getImage();
             String bookImage = (imageBytes != null) ? Base64.getEncoder().encodeToString(imageBytes) : "path/to/placeholder/image.jpg";
-            CollectRecordDTO dto = new CollectRecordDTO(record.getCollectrecordid(),"data:image/png;base64," + bookImage, book.getName(), username, record.getLenddate());
-            return dto;
+            return new CollectRecordDTO(record.getCollectrecordid(),"data:image/png;base64," + bookImage, book.getName(), username, record.getLenddate());
         }).collect(Collectors.toList());
 
-        records = records.stream().filter(record -> record != null).collect(Collectors.toList());
+        records = records.stream().filter(Objects::nonNull).collect(Collectors.toList());
 
         IPage<CollectRecordDTO> dtoPage = new Page<>();
         dtoPage.setCurrent(collectRecordPage.getCurrent());
@@ -108,11 +108,10 @@ public class CollectRecordServiceImpl extends ServiceImpl<CollectRecordMapper, C
             String username = userMapper.findUsernameByUserId(record.getUserid());
             byte[] imageBytes = book.getImage();
             String bookImage = (imageBytes != null) ? Base64.getEncoder().encodeToString(imageBytes) : "path/to/placeholder/image.jpg";
-            CollectRecordDTO dto = new CollectRecordDTO(record.getCollectrecordid(), "data:image/png;base64," + bookImage, book.getName(), username, record.getLenddate());
-            return dto;
+            return new CollectRecordDTO(record.getCollectrecordid(), "data:image/png;base64," + bookImage, book.getName(), username, record.getLenddate());
         }).collect(Collectors.toList());
 
-        records = records.stream().filter(record -> record != null).collect(Collectors.toList());
+        records = records.stream().filter(Objects::nonNull).collect(Collectors.toList());
 
         IPage<CollectRecordDTO> dtoPage = new Page<>();
         dtoPage.setCurrent(collectRecordPage.getCurrent());

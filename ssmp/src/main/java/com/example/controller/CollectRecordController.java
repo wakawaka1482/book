@@ -27,7 +27,7 @@ public class CollectRecordController {
             return new R(true, page);
         } catch (Exception e) {
             System.err.println("Error occurred: " + e.getMessage());
-            e.printStackTrace();
+
             return new R(false, e.getMessage());
         }
     }
@@ -37,7 +37,6 @@ public class CollectRecordController {
             IPage<CollectRecordDTO> page=collectRecordService.findPageByAdmin(paginationRequest);
             return new R(true, page);
         }catch (Exception e){
-            e.printStackTrace();
             return new R(false, e.getMessage());
         }
     }

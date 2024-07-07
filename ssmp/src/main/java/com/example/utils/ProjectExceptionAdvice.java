@@ -11,7 +11,7 @@ public class ProjectExceptionAdvice {
         //记录日志
         //通知运维
         //通知开发
-        ex.printStackTrace();
+        //ex.printStackTrace();
         return new R("服务器故障，请稍后再试！");
     }
 }

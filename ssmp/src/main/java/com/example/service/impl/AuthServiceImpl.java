@@ -19,10 +19,7 @@ public class AuthServiceImpl extends ServiceImpl<UserMapper, User> implements Au
     @Override
     public boolean authenticate(String username, String password) {
         User user = userMapper.findByUsername(username);
-        if (user != null && user.getPassword().equals(password)) {
-            return true;
-        }
-        return false;
+        return user != null && user.getPassword().equals(password);
     }
 
     @Override

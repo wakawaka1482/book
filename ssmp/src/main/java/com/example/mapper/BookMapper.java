@@ -6,7 +6,6 @@ import com.example.dto.BookTypeCount;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -14,9 +13,6 @@ import java.util.List;
 public interface BookMapper extends BaseMapper<Book> {
     @Select("SELECT name FROM sp_book WHERE id = #{id}")
     String findBookNameById(@Param("id") Integer id);
-
-    @Select("SELECT image FROM sp_book WHERE id = #{id}")
-    byte[] findBookImageById(@Param("id") Integer id);
 
     @Select("SELECT * FROM sp_book WHERE id = #{bookId}")
     Book selectById(Integer bookId);

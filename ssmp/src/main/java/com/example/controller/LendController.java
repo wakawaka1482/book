@@ -135,7 +135,7 @@ public class LendController {
             book.setNumber(book.getNumber() - 1);
             boolean updateSuccess = bookService.updateById(book);
             if (updateSuccess) {
-                boolean success = lendService.addLendRecord(lendRecord);
+                lendService.addLendRecord(lendRecord);
                 return new R(true, "借阅记录添加成功");
             } else {
                 return new R(false, "借阅记录添加失败");
@@ -168,7 +168,6 @@ public class LendController {
             return new R(true, "归还图书成功");
 
         } catch (Exception e) {
-            e.printStackTrace();
             return new R(false, "归还图书失败: " + e.getMessage());
         }
     }
