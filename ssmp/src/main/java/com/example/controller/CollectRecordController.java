@@ -22,12 +22,8 @@ public class CollectRecordController {
     public R findPageUser(@RequestBody PaginationRequest paginationRequest) {
         try {
             IPage<CollectRecordDTO> page = collectRecordService.findPageByUser(paginationRequest);
-            System.out.println("返回的结果: ");
-            System.out.println(page);
             return new R(true, page);
         } catch (Exception e) {
-            System.err.println("Error occurred: " + e.getMessage());
-
             return new R(false, e.getMessage());
         }
     }

@@ -12,10 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @RestController
 @RequestMapping("/lend")
@@ -33,93 +32,52 @@ public class LendController {
     @Autowired
     private BookMapper bookMapper;
 
-    @PostMapping("/findPageUser")
-    public R findPageUser(@RequestBody Map<String, Object> params) {
-        try {
-            String username = (String) params.get("username");
-            int currentPage = (int) params.get("currentPage");
-            int pageSize = (int) params.get("pageSize");
+    //格式化东八区时间
+    private String formatToEastEightZoneTime() {
+        LocalDateTime localDateTime = LocalDateTime.now(ZoneId.of("UTC+8"));
+        return localDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+    }
 
-            // 通过用户名查询用户ID
-            Integer userid = userMapper.findUserIdByUsername(username);
-            if (userid == null) {
+    //构建LendRecordDTO列表
+    private List<LendRecordDTO> buildLendRecordDTOList(List<LendRecord> records) {
+        List<LendRecordDTO> recordDTOs = new ArrayList<>();
+        for (LendRecord record : records) {
+            String bookname = bookMapper.findBookNameById(record.getBookid());
+            String lendUsername = userMapper.findUsernameById(record.getUserid());
+            LocalDateTime backtime = record.getLendtime().plusMonths(1);
+            LendRecordDTO recordDTO = new LendRecordDTO(record.getLendid(), bookname, lendUsername, record.getLendtime(), backtime);
+            recordDTOs.add(recordDTO);
+        }
+        return recordDTOs;
+    }
+
+    // 分页查询借阅记录
+    private R queryLendRecords(String username, int currentPage, int pageSize, String queryString) {
+        try {
+            int offset = (currentPage - 1) * pageSize;
+            Integer userid = username != null ? userMapper.findUserIdByUsername(username) : null;
+
+            if (username != null && userid == null) {
                 return new R(false, "用户不存在");
             }
 
-            // 查询用户的借阅记录
-            int offset = (currentPage - 1) * pageSize;
-            List<LendRecord> records = lendService.findLendRecordsByUserId(userid, pageSize, offset);
-            int total = lendService.countLendRecordsByUserId(userid);
-
-            List<LendRecordDTO> recordDTOs = new ArrayList<>();
-            for (LendRecord record : records) {
-                // 查询bookname和username
-                String bookname = bookMapper.findBookNameById(record.getBookid());
-                String lendUsername = userMapper.findUsernameById(record.getUserid());
-
-                // 设置backtime为lendtime的一个月以后
-                LocalDateTime backtime = record.getLendtime().plusMonths(1);
-
-                // 构建LendRecordDTO
-                LendRecordDTO recordDTO = new LendRecordDTO(record.getLendid(),bookname, lendUsername, record.getLendtime(), backtime);
-                recordDTOs.add(recordDTO);
-            }
-
-            Map<String, Object> result = new HashMap<>();
-            result.put("total", total);
-            result.put("records", recordDTOs);
-
-
-            System.out.println("返回的结果: ");
-            System.out.println(result);
-
-            return new R(true, result);
-        } catch (Exception e) {
-            /*e.printStackTrace(); // 打印异常堆栈信息以便调试*/
-            return new R(false, "获取借阅记录失败: " + e.getMessage());
-        }
-    }
-
-    @PostMapping("/findPageAll")
-    public R findPageAll(@RequestBody Map<String, Object> params) {
-        try {
-            int currentPage = (int) params.get("currentPage");
-            int pageSize = (int) params.get("pageSize");
-            String queryString = (String) params.get("queryString");
-
-            // 计算分页偏移量
-            int offset = (currentPage - 1) * pageSize;
-
-            // 分页查询所有借阅记录
             List<LendRecord> records;
             int total;
             if (queryString != null && !queryString.isEmpty()) {
-                // 如果有查询条件，根据图书编号查询
                 records = lendService.findLendRecordsByBookId(queryString, pageSize, offset);
                 total = lendService.countLendRecordsByBookId(queryString);
+            } else if (userid != null) {
+                records = lendService.findLendRecordsByUserId(userid, pageSize, offset);
+                total = lendService.countLendRecordsByUserId(userid);
             } else {
-                // 如果没有查询条件，查询所有借阅记录
                 records = lendService.findAllLendRecords(pageSize, offset);
                 total = lendService.countAllLendRecords();
             }
 
-            List<LendRecordDTO> recordDTOs = new ArrayList<>();
-            for (LendRecord record : records) {
-                // 查询bookname和username
-                String bookname = bookMapper.findBookNameById(record.getBookid());
-                String lendUsername = userMapper.findUsernameById(record.getUserid());
-
-                // 设置backtime为lendtime的一个月以后
-                LocalDateTime backtime = record.getLendtime().plusMonths(1);
-
-                // 构建LendRecordDTO
-                LendRecordDTO recordDTO = new LendRecordDTO(record.getLendid(), bookname, lendUsername, record.getLendtime(), backtime);
-                recordDTOs.add(recordDTO);
-            }
-
+            List<LendRecordDTO> recordDTOs = buildLendRecordDTOList(records);
             Map<String, Object> result = new HashMap<>();
             result.put("total", total);
-            result.put("rows", recordDTOs);
+            result.put("records", recordDTOs);
 
             return new R(true, result);
         } catch (Exception e) {
@@ -127,14 +85,33 @@ public class LendController {
         }
     }
 
+    @PostMapping("/findPageUser")
+    public R findPageUser(@RequestBody Map<String, Object> params) {
+        String username = (String) params.get("username");
+        int currentPage = (int) params.get("currentPage");
+        int pageSize = (int) params.get("pageSize");
+        return queryLendRecords(username, currentPage, pageSize, null);
+    }
+
+    @PostMapping("/findPageAll")
+    public R findPageAll(@RequestBody Map<String, Object> params) {
+        int currentPage = (int) params.get("currentPage");
+        int pageSize = (int) params.get("pageSize");
+        String queryString = (String) params.get("queryString");
+        return queryLendRecords(null, currentPage, pageSize, queryString);
+    }
 
     @PostMapping("/add")
     public R addLendRecord(@RequestBody LendRecord lendRecord) {
         try {
             Book book = bookService.getById(lendRecord.getBookid());
+            if (book.getNumber() <= 0) {
+                return new R(false, "借阅记录添加失败: 图书数量不足");
+            }
             book.setNumber(book.getNumber() - 1);
             boolean updateSuccess = bookService.updateById(book);
             if (updateSuccess) {
+                lendRecord.setLendtime(LocalDateTime.now(ZoneId.of("UTC+8")));
                 lendService.addLendRecord(lendRecord);
                 return new R(true, "借阅记录添加成功");
             } else {
@@ -149,24 +126,22 @@ public class LendController {
     public R returnBook(@RequestBody Map<String, Object> params) {
         try {
             Integer lendid = (Integer) params.get("lendid");
-            Integer bookid = lendService.getBookIdByLendId(lendid);
             if (lendid == null) {
                 return new R(false, "借阅记录ID不能为空");
             }
 
-            // 更新归还时间
-            lendService.updateBackTime(lendid, LocalDateTime.now());
-            // 获取书籍并更新数量
+            Integer bookid = lendService.getBookIdByLendId(lendid);
+            lendService.updateBackTime(lendid, LocalDateTime.now(ZoneId.of("UTC+8")));
+
             Book book = bookService.getById(bookid);
             if (book == null) {
                 return new R(false, "未找到对应的图书");
             }
 
             book.setNumber(book.getNumber() + 1);
-            bookService.updateById(book);  // 更新书籍信息
+            bookService.updateById(book);
 
             return new R(true, "归还图书成功");
-
         } catch (Exception e) {
             return new R(false, "归还图书失败: " + e.getMessage());
         }
