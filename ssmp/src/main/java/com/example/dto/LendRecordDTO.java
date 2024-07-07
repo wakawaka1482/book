@@ -24,11 +24,6 @@ public class LendRecordDTO {
 
     @Override
     public String toString() {
-        return "LendRecordDTO{" +
-                "bookname='" + bookname + '\'' +
-                ", username='" + username + '\'' +
-                ", lendtime=" + lendtime +
-                ", backtime=" + backtime +
-                '}';
+        return "LendRecordDTO{" + "bookname='" + bookname + '\'' + ", username='" + username + '\'' + ", lendtime=" + lendtime + ", backtime=" + backtime + '}';
     }
 }
