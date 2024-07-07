@@ -35,4 +35,7 @@ public interface LendRecordMapper {
 
     @Delete("DELETE FROM sp_lend_record WHERE lendid = #{lendid}")
     int deleteLendById(int lendid);
+
+    @Select("SELECT bookid FROM sp_lend_record WHERE lendid = #{lendid}")
+    Integer getBookIdByLendId(Integer lendid);
 }

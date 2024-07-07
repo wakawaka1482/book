@@ -32,6 +32,7 @@ public class LendServiceImpl implements LendService {
 
     @Override
     public int countAllLendRecords() {
+
         return lendRecordMapper.countAllLendRecords();
     }
 
@@ -52,6 +53,7 @@ public class LendServiceImpl implements LendService {
 
     @Override
     public int countLendRecordsByBookId(String bookId) {
+
         return lendRecordMapper.countLendRecordsByBookId(bookId);
     }
 
@@ -59,5 +61,10 @@ public class LendServiceImpl implements LendService {
     public boolean deleteLend(Integer lendid) {
         int rowsAffected = lendRecordMapper.deleteLendById(lendid);
         return rowsAffected > 0;
+    }
+
+    @Override
+    public Integer getBookIdByLendId(Integer lendid) {
+        return lendRecordMapper.getBookIdByLendId(lendid);
     }
 }

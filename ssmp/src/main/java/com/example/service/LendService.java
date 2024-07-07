@@ -24,4 +24,6 @@ public interface LendService {
     int countLendRecordsByBookId(String bookId);
 
     boolean deleteLend(Integer lendid);
+
+    Integer getBookIdByLendId(Integer lendid);
 }

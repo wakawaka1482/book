@@ -127,6 +127,7 @@ public class LendController {
         }
     }
 
+
     @PostMapping("/add")
     public R addLendRecord(@RequestBody LendRecord lendRecord) {
         try {
@@ -148,13 +149,24 @@ public class LendController {
     public R returnBook(@RequestBody Map<String, Object> params) {
         try {
             Integer lendid = (Integer) params.get("lendid");
+            Integer bookid = lendService.getBookIdByLendId(lendid);
             if (lendid == null) {
                 return new R(false, "借阅记录ID不能为空");
             }
 
             // 更新归还时间
             lendService.updateBackTime(lendid, LocalDateTime.now());
+            // 获取书籍并更新数量
+            Book book = bookService.getById(bookid);
+            if (book == null) {
+                return new R(false, "未找到对应的图书");
+            }
+
+            book.setNumber(book.getNumber() + 1);
+            bookService.updateById(book);  // 更新书籍信息
+
             return new R(true, "归还图书成功");
+
         } catch (Exception e) {
             e.printStackTrace();
             return new R(false, "归还图书失败: " + e.getMessage());
