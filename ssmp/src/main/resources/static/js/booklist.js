@@ -115,13 +115,9 @@ vue = new Vue({
                     } else {
                         this.$message.error(res.data.message);
                     }
-                }).catch(error => {
-                    this.$message.error('借阅图书失败');
-                    console.error(error);
-                });
-            }).catch(error => {
-                this.$message.error('获取用户ID失败');
-                console.error('获取用户ID失败', error);
+                })
+            }).finally(()=>{
+                this.getAll();
             });
         },
         handleCollect(row) {

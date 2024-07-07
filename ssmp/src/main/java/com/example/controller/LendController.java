@@ -127,27 +127,19 @@ public class LendController {
         }
     }
 
-
     @PostMapping("/add")
     public R addLendRecord(@RequestBody LendRecord lendRecord) {
         try {
-            boolean success = lendService.addLendRecord(lendRecord);
-            if (success) {
-                // 更新图书数量
-                Book book = bookService.getById(lendRecord.getBookid());
-                if (book != null) {
-                    book.setNumber(book.getNumber() - 1);
-                    boolean updateSuccess = bookService.updateById(book);
-                    if (!updateSuccess) {
-                        throw new RuntimeException("图书数量更新失败");
-                    }
-                }
+            Book book = bookService.getById(lendRecord.getBookid());
+            book.setNumber(book.getNumber() - 1);
+            boolean updateSuccess = bookService.updateById(book);
+            if (updateSuccess) {
+                boolean success = lendService.addLendRecord(lendRecord);
                 return new R(true, "借阅记录添加成功");
             } else {
                 return new R(false, "借阅记录添加失败");
             }
         } catch (Exception e) {
-            e.printStackTrace(); // 打印堆栈跟踪以进行调试
             return new R(false, "添加借阅记录失败: " + e.getMessage());
         }
     }
