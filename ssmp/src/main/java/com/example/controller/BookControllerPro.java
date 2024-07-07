@@ -45,18 +45,19 @@ public class BookControllerPro {
     }
 
     @PutMapping
-    public R update(@RequestParam("book") String bookJson, @RequestParam("image") MultipartFile image) throws IOException {
+    public R update(@RequestParam("book") String bookJson, @RequestParam(value = "image", required = false) MultipartFile image) throws IOException {
         // 将JSON字符串转换为Book对象
         Book book = new ObjectMapper().readValue(bookJson, Book.class);
 
         // 处理上传的照片数据
-        if (!image.isEmpty()) {
+        if (image != null && !image.isEmpty()) {
             book.setImage(image.getBytes());
         }
 
         Boolean flag = iBookService.updateById(book);
         return new R(flag, flag ? "更新成功" : "更新失败");
     }
+
 
     @DeleteMapping("{id}")
     public R delete(@PathVariable Integer id){

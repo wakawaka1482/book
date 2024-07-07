@@ -15,4 +15,5 @@ public class Book {
     private String name;
     private String description;
     private transient MultipartFile imageFile;
+    private Integer number;
 }

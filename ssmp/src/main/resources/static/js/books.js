@@ -111,7 +111,9 @@ var vue = new Vue({
         handleEdit() {
             const formData = new FormData();
             formData.append('book', JSON.stringify(this.formData));
-            formData.append('image', this.selectedFile);
+            if (this.selectedFile) {
+                formData.append('image', this.selectedFile);
+            }
 
             axios.put('/books', formData, {
                 headers: {
