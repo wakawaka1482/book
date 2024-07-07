@@ -53,19 +53,14 @@ new Vue({
                         this.$message.error(response.data.message);
                     }
                 }).catch(error => {
-                console.error('API 请求错误:', error);
             });
         },
         getUsername() {
             // 从localStorage获取用户名
             this.username = localStorage.getItem('username');
-            if (!this.username) {
-                console.error('用户名未找到，请确保用户已登录');
-            }
         }
     },
     mounted() {
-        console.log("Component mounted");
         this.getUsername();  // 获取用户名
         this.findPage();  // 获取数据
     },

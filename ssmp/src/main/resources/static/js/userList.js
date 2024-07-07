@@ -80,7 +80,6 @@ var vue = new Vue({
         // 重置表单
         resetForm() {
             this.formData = {};//重置数据
-            console.log("Form reset.");
         },
         // 弹出添加窗口
         handleCreate() {

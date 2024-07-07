@@ -71,17 +71,12 @@ var vue = new Vue({
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                console.log('Deleting record with ID:', row.collectrecordid); // 添加日志以调试
                 axios.post('/collect/delete', { collectrecordid: row.collectrecordid })
                     .then(response => {
                         if (response.data.flag) {
                             this.findPage();
-                        } else {
-                            console.error('删除失败:', response.data.message);
                         }
-                    }).catch(error => {
-                    console.error('API 请求错误:', error);
-                });
+                    });
             }).catch(() => {
                 this.$message({
                     type: 'info',

@@ -196,18 +196,15 @@ vue = new Vue({
         getUserId() {
             return new Promise((resolve, reject) => {
                 if (!this.username) {
-                    console.error('未找到用户名');
                     reject('未找到用户名');
                     return;
                 }
 
                 const encodedUsername = encodeURIComponent(this.username);
                 const url = `/auth/getUserId?username=${encodedUsername}`;
-                console.log(`请求用户ID的URL: ${url}`);
 
                 axios.get(url)
                     .then(res => {
-                        console.log('响应数据:', res);
                         if (res.status === 200 && res.data.flag) {
                             resolve(res.data.data);
                         } else {

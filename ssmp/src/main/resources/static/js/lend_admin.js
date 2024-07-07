@@ -46,7 +46,6 @@ var vue = new Vue({
         // 切换页码
         handleCurrentChange(currentPage) {
             // 设置最新的页码
-            console.log('切换到页码:', currentPage);
             this.pagination.currentPage = currentPage;
             // 重新调用findPage方法进行分页查询
             this.findPage();
@@ -60,7 +59,6 @@ var vue = new Vue({
             }).then(() => {
                 // 发送ajax请求，将图书id提交到Controller进行处理
                 axios.get("/lend/delete", {params: {lendid: row.lendid}}).then((res) => {
-                    console.log('删除操作后端返回的数据:', res.data);
                     if (res.data.flag) {
                         // 执行成功
                         this.$message({
