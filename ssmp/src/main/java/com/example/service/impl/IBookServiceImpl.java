@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.dto.BookLendCount;
 import com.example.entity.Book;
 import com.example.dto.BookTypeCount;
 import com.example.mapper.BookMapper;
@@ -12,6 +13,7 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -51,5 +53,10 @@ public class IBookServiceImpl extends ServiceImpl<BookMapper, Book> implements I
     @Override
     public boolean updateById(Book book) {
         return this.baseMapper.updateById(book) > 0;
+    }
+
+    @Override
+    public List<BookLendCount> getBookLendCounts() {
+        return bookMapper.countBookLendsWithNames();
     }
 }

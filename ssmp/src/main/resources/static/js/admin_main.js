@@ -69,7 +69,7 @@ new Vue({
                     {
                         "path": "/1-1",
                         "title": "借阅数量",
-                        "linkUrl":"Echars.html",
+                        "linkUrl":"lend_num.html",
                         "children":[]
                     },
                 ]

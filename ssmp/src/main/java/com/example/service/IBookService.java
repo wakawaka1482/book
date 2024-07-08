@@ -2,6 +2,7 @@ package com.example.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.dto.BookLendCount;
 import com.example.entity.Book;
 import com.example.dto.BookTypeCount;
 
@@ -16,4 +17,6 @@ public interface IBookService extends IService<Book> {
     List<BookTypeCount> getBookTypeCounts();
 
     boolean updateById(Book book);
+
+    List<BookLendCount> getBookLendCounts();
 }

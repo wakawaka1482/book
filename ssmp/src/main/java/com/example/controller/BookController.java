@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.example.dto.BookLendCount;
 import com.example.entity.Book;
 import com.example.dto.BookTypeCount;
 import com.example.service.IBookService;
@@ -86,6 +87,11 @@ public class BookController {
     @PostMapping("/EcharsShow")
     public List<BookTypeCount> getBookTypeCountsUser() {
         return iBookService.getBookTypeCounts();
+    }
+
+    @PostMapping("/LendCountsShow")
+    public List<BookLendCount> getBookLendCounts() {
+        return iBookService.getBookLendCounts();
     }
 
     @PostMapping("/EcharsShowAdmin")
