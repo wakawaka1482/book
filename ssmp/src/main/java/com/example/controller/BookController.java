@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/books")
-public class BookControllerPro {
+public class BookController {
     @Resource
     private IBookService iBookService;
 
