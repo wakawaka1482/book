@@ -24,6 +24,7 @@ public class AuthController {
     @Autowired
     private AuthHandler authChain;
 
+    //登录
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> loginData) {
         String username = loginData.get("username");
@@ -49,6 +50,7 @@ public class AuthController {
         }
     }
 
+    //注册
     @PostMapping("/register")
     public ResponseEntity<Map<String, Object>> register(@RequestBody Map<String, Object> registerData) {
         String username = (String) registerData.get("username");
@@ -71,6 +73,7 @@ public class AuthController {
         }
     }
 
+    //获取用户id
     @GetMapping("/getUserId")
     public ResponseEntity<Map<String, Object>> getUserIdByUsername(@RequestParam String username) {
         Integer userId = authService.findUserIdByUsername(username);
@@ -86,6 +89,7 @@ public class AuthController {
         }
     }
 
+    //通过userid获取用户信息
     @GetMapping("/getUserInfoByUsername")
     public R getUserInfoByUsername(@RequestParam String username) {
         Integer userId = authService.findUserIdByUsername(username);
@@ -96,6 +100,7 @@ public class AuthController {
         }
     }
 
+    //修改密码
     @PostMapping("/updatepwd")
     public R updatePassword(@RequestBody Map<String, String> params) {
         try {
@@ -113,12 +118,14 @@ public class AuthController {
             return new R(false, "密码更新失败: " + e.getMessage());
         }
     }
+    //获取全部用户
     @PostMapping("/users")
     public R getAllUsers(@RequestBody PaginationDTO paginationDTO) {
         IPage<User> userPage = authService.getAllUsers(paginationDTO.getCurrentPage(), paginationDTO.getPageSize());
         return new R(true, userPage);
     }
 
+    //删除用户
     @DeleteMapping("/delete/{id}")
     public R deleteUser(@PathVariable int id) {
         boolean removed = authService.removeById(id);
@@ -129,6 +136,7 @@ public class AuthController {
         }
     }
 
+    //更改用户信息
     @GetMapping("/update/{id}")
     public R getUserById(@PathVariable int id) {
         User user = authService.getUserById(id);
@@ -138,7 +146,7 @@ public class AuthController {
             return new R(false, "用户数据获取失败，用户不存在");
         }
     }
-
+    //更改用户信息
     @PostMapping("/update")
     public R updateUser(@RequestBody User user) {
         boolean result = authService.updateUser(user);

@@ -24,13 +24,14 @@ public class BookController {
     @Resource
     private IBookService iBookService;
 
+    //获取全部书籍
     @GetMapping
     public R getAll() {
         List<Book> bookList = iBookService.list();
         return new R(true ,bookList);
     }
 
-
+    //添加图书
     @PostMapping
     public R save(@RequestParam("book") String bookJson, @RequestParam("image") MultipartFile image) throws IOException {
         // 将JSON字符串转换为Book对象
@@ -45,6 +46,7 @@ public class BookController {
         return new R(flag, flag ? "添加成功" : "添加失败");
     }
 
+    //修改图书
     @PutMapping
     public R update(@RequestParam("book") String bookJson, @RequestParam(value = "image", required = false) MultipartFile image) throws IOException {
         // 将JSON字符串转换为Book对象
@@ -59,19 +61,21 @@ public class BookController {
         return new R(flag, flag ? "更新成功" : "更新失败");
     }
 
-
+    //删除图书
     @DeleteMapping("{id}")
     public R delete(@PathVariable Integer id){
         Boolean flag = iBookService.removeById(id);
         return new R(flag, flag ? "删除成功" : "删除失败");
     }
 
+    //通过id获取图书
     @GetMapping("{id}")
     public R getById(@PathVariable Integer id){
         Book book = iBookService.getById(id);
         return new R(true,book);
     }
 
+    //分页
     @GetMapping("{currentPage}/{pageSize}")
     public R getPage(@PathVariable int currentPage, @PathVariable int pageSize, Book book) {
         IPage<Book> pageBook = iBookService.getPage(currentPage,pageSize,book);
@@ -84,16 +88,19 @@ public class BookController {
         return new R(true, books);
     }
 
+    //图表展示
     @PostMapping("/EcharsShow")
     public List<BookTypeCount> getBookTypeCountsUser() {
         return iBookService.getBookTypeCounts();
     }
 
+    //借阅图表展示
     @PostMapping("/LendCountsShow")
     public List<BookLendCount> getBookLendCounts() {
         return iBookService.getBookLendCounts();
     }
 
+    //借阅数量图表展示
     @PostMapping("/EcharsShowAdmin")
     public R getBookTypeCountsAdmin() {
         Map<String, Object> result = new HashMap<>();
