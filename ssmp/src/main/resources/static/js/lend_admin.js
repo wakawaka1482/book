@@ -43,8 +43,7 @@ var vue = new Vue({
             }).catch(error => {
                 console.error('API 请求错误:', error);
             });
-        }
-        ,
+        },
         // 重置表单
         resetForm() {
             this.formData = {}; // 重置数据
