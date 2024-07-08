@@ -70,7 +70,7 @@ public class LendController {
             List<LendRecordDTO> recordDTOs = buildLendRecordDTOList(records);
             Map<String, Object> result = new HashMap<>();
             result.put("total", total);
-            result.put("records", recordDTOs);
+            result.put("rows", recordDTOs); // 确保键名为 "rows"
 
             return new R(true, result);
         } catch (Exception e) {

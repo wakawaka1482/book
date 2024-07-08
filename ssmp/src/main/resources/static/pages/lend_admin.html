@@ -29,7 +29,7 @@
                 <el-input placeholder="图书编号" suffix-icon="el-icon-search" v-model="pagination.queryString" style="width: 200px;" class="filter-item"></el-input>
                 <el-button @click="findPage()" class="dalfBut">查询</el-button>
             </div>
-            <el-table size="small"  :data="dataList" stripe highlight-current-row>
+            <el-table size="small" :data="dataList" stripe highlight-current-row>
                 <el-table-column type="index" align="center" label="序号"></el-table-column>
                 <el-table-column prop="bookname" label="图书名称" align="center"></el-table-column>
                 <el-table-column prop="username" label="图书借阅者" align="center"></el-table-column>
@@ -41,6 +41,7 @@
                     </template>
                 </el-table-column>
             </el-table>
+
             <div class="pagination-container">
                 <el-pagination
                         class="pagiantion"

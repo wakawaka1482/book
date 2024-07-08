@@ -3,7 +3,7 @@ var vue = new Vue({
     data: {
         pagination: { // 分页相关模型数据
             currentPage: 1, // 当前页码
-            pageSize: 6, // 每页显示的记录数
+            pageSize: 10, // 每页显示的记录数
             total: 0, // 总记录数
             queryString: null // 查询条件
         },
@@ -31,13 +31,20 @@ var vue = new Vue({
                 queryString: this.pagination.queryString
             };
             axios.post("/lend/findPageAll", param).then((res) => {
-                // 解析Controller响应回的数据，为模型数据赋值
-                this.dataList = res.data.data.rows; // 这里修改为访问 data 中的 rows
-                this.pagination.total = res.data.data.total;
+                if (res.data.flag) {
+                    console.log('API 请求成功:', res.data);
+                    this.dataList = res.data.data.rows; // 确保键名为 "rows"
+                    this.pagination.total = res.data.data.total;
+                    console.log('数据列表:', this.dataList);
+                } else {
+                    console.error('API 请求失败:', res.data.message);
+                    this.$message.error(res.data.message || '获取数据失败');
+                }
             }).catch(error => {
                 console.error('API 请求错误:', error);
             });
-        },
+        }
+        ,
         // 重置表单
         resetForm() {
             this.formData = {}; // 重置数据
