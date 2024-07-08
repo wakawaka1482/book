@@ -15,6 +15,7 @@ public class UsernamePasswordAuthHandler implements AuthHandler {
 
     @Override
     public void setNextHandler(AuthHandler nextHandler) {
+
         this.nextHandler = nextHandler;
     }
 
@@ -31,4 +32,3 @@ public class UsernamePasswordAuthHandler implements AuthHandler {
         }
     }
 }
-

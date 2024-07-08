@@ -133,7 +133,7 @@ public class AuthController {
     public R getUserById(@PathVariable int id) {
         User user = authService.getUserById(id);
         if (user != null) {
-            return new R(true, user); // 使用 R(Boolean flag, Object data) 构造函数
+            return new R(true, user);
         } else {
             return new R(false, "用户数据获取失败，用户不存在");
         }

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @RestController
@@ -31,12 +30,6 @@ public class LendController {
 
     @Autowired
     private BookMapper bookMapper;
-
-    //格式化东八区时间
-    private String formatToEastEightZoneTime() {
-        LocalDateTime localDateTime = LocalDateTime.now(ZoneId.of("UTC+8"));
-        return localDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-    }
 
     //构建LendRecordDTO列表
     private List<LendRecordDTO> buildLendRecordDTOList(List<LendRecord> records) {

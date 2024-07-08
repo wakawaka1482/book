@@ -18,16 +18,6 @@ public class R {
     private String redirectUrl;
     private String message;
 
-    public R(boolean success, String redirectUrl, String message) {
-        this.success = success;
-        this.redirectUrl = redirectUrl;
-        this.message = message;
-    }
-
-    public R(Boolean flag) {
-        this.flag = flag;
-    }
-
     public R(Boolean flag, Object data) {
         this.flag = flag;
         this.data = data;
