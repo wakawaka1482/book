@@ -523,9 +523,10 @@ label input[type="radio"]:checked {
 	display: block;
 	height: 50px;
 }
-.el-menu--collapse .el-submenu__icon-arrow{ display: none}
-/* .el-container{position: relative;} */
-/* foot */
+.el-menu--collapse .el-submenu__icon-arrow{
+	display: none
+}
+
 .el-footer{
 	position: absolute;
 	left: 180px;
