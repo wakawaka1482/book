@@ -1,5 +1,6 @@
 package com.example.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -50,6 +51,7 @@ public class AuthServiceImpl extends ServiceImpl<UserMapper, User> implements Au
 
     @Override
     public Integer findUserIdByUsername(String username) {
+
         return userMapper.findUserIdByUsername(username);
     }
 
@@ -73,11 +75,14 @@ public class AuthServiceImpl extends ServiceImpl<UserMapper, User> implements Au
 
     public IPage<User> getAllUsers(int currentPage, int pageSize) {
         Page<User> page = new Page<>(currentPage, pageSize);
-        return userMapper.selectPage(page, null);
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("role", "user");
+        return userMapper.selectPage(page, queryWrapper);
     }
 
     @Override
     public boolean removeById(int id) {
+
         return userMapper.deleteById(id) > 0;
     }
 
