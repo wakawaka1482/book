@@ -31,8 +31,8 @@ public class LendController {
     @Autowired
     private BookMapper bookMapper;
 
-    //构建LendRecordDTO列表
-    private List<LendRecordDTO> buildLendRecordDTOList(List<LendRecord> records) {
+    // 构建用户的 LendRecordDTO 列表，显示 backtime 为一个月后
+    private List<LendRecordDTO> buildUserLendRecordDTOList(List<LendRecord> records) {
         List<LendRecordDTO> recordDTOs = new ArrayList<>();
         for (LendRecord record : records) {
             String bookname = bookMapper.findBookNameById(record.getBookid());
@@ -44,8 +44,20 @@ public class LendController {
         return recordDTOs;
     }
 
+    // 构建管理员的 LendRecordDTO 列表，显示数据库中的 backtime
+    private List<LendRecordDTO> buildAdminLendRecordDTOList(List<LendRecord> records) {
+        List<LendRecordDTO> recordDTOs = new ArrayList<>();
+        for (LendRecord record : records) {
+            String bookname = bookMapper.findBookNameById(record.getBookid());
+            String lendUsername = userMapper.findUsernameById(record.getUserid());
+            LendRecordDTO recordDTO = new LendRecordDTO(record.getLendid(), bookname, lendUsername, record.getLendtime(), record.getBacktime());
+            recordDTOs.add(recordDTO);
+        }
+        return recordDTOs;
+    }
+
     // 分页查询借阅记录
-    private R queryLendRecords(String username, int currentPage, int pageSize, String queryString) {
+    private R queryLendRecords(String username, int currentPage, int pageSize, String queryString, boolean isAdmin) {
         try {
             int offset = (currentPage - 1) * pageSize;
             Integer userid = username != null ? userMapper.findUserIdByUsername(username) : null;
@@ -67,10 +79,16 @@ public class LendController {
                 total = lendService.countAllLendRecords();
             }
 
-            List<LendRecordDTO> recordDTOs = buildLendRecordDTOList(records);
+            List<LendRecordDTO> recordDTOs;
+            if (isAdmin) {
+                recordDTOs = buildAdminLendRecordDTOList(records);
+            } else {
+                recordDTOs = buildUserLendRecordDTOList(records);
+            }
+
             Map<String, Object> result = new HashMap<>();
             result.put("total", total);
-            result.put("rows", recordDTOs); // 确保键名为 "rows"
+            result.put("rows", recordDTOs);
 
             return new R(true, result);
         } catch (Exception e) {
@@ -83,7 +101,7 @@ public class LendController {
         String username = (String) params.get("username");
         int currentPage = (int) params.get("currentPage");
         int pageSize = (int) params.get("pageSize");
-        return queryLendRecords(username, currentPage, pageSize, null);
+        return queryLendRecords(username, currentPage, pageSize, null, false);
     }
 
     @PostMapping("/findPageAll")
@@ -91,7 +109,7 @@ public class LendController {
         int currentPage = (int) params.get("currentPage");
         int pageSize = (int) params.get("pageSize");
         String queryString = (String) params.get("queryString");
-        return queryLendRecords(null, currentPage, pageSize, queryString);
+        return queryLendRecords(null, currentPage, pageSize, queryString, true);
     }
 
     @PostMapping("/add")

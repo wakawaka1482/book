@@ -33,7 +33,13 @@ var vue = new Vue({
             axios.post("/lend/findPageAll", param).then((res) => {
                 if (res.data.flag) {
                     console.log('API 请求成功:', res.data);
-                    this.dataList = res.data.data.rows; // 确保键名为 "rows"
+                    // 遍历 dataList ，如果 backtime 为空，将其设置为 "未归还"
+                    this.dataList = res.data.data.rows.map(record => {
+                        if (!record.backtime) {
+                            record.backtime = "未归还";
+                        }
+                        return record;
+                    });
                     this.pagination.total = res.data.data.total;
                     console.log('数据列表:', this.dataList);
                 } else {
@@ -69,7 +75,7 @@ var vue = new Vue({
                         // 执行成功
                         this.$message({
                             type: 'success',
-                            message: res.data.message||'删除成功！'
+                            message: res.data.message || '删除成功！'
                         });
                         // 重新进行分页查询
                         this.returnPage();
