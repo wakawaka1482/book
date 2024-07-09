@@ -8,5 +8,6 @@ import lombok.Setter;
 public class PaginationDTO {
     private int currentPage;
     private int pageSize;
+    private String queryString;
 
 }

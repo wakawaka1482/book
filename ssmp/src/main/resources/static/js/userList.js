@@ -61,6 +61,35 @@ var vue = new Vue({
                 }
             });
         },
+        //姓名查询
+        finPage() {
+            console.log(`开始查询，当前页：${this.pagination.currentPage}，每页显示：${this.pagination.pageSize}，查询条件：${this.pagination.queryString}`);
+
+            axios.post('/auth/users/query', {
+                currentPage: this.pagination.currentPage,
+                pageSize: this.pagination.pageSize,
+                queryString: this.pagination.queryString
+            }).then(response => {
+                if (response.status === 200) {
+                    if (response.data && response.data.flag) {  // 仅判断 flag 字段
+                        console.log("查询成功，返回数据：", response.data.data.records);
+                        this.dataList = response.data.data.records;
+                        this.pagination.total = response.data.data.total;
+                    } else {
+                        console.warn("查询失败，flag 字段为 false：", response.data);
+                        this.$message.error('查询失败');
+                    }
+                } else {
+                    console.warn("响应状态不是 200，响应状态为：", response.status);
+                    this.$message.error('查询失败');
+                }
+            }).catch(error => {
+                console.error("查询出错，错误信息：", error);
+                this.$message.error('查询失败');
+            });
+        },
+
+
         //分页查询
         findPage() {
             var param = {

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.dto.PaginationDTO;
 import com.example.entity.User;
 import com.example.mapper.UserMapper;
 import com.example.service.AuthService;
@@ -89,5 +90,16 @@ public class AuthServiceImpl extends ServiceImpl<UserMapper, User> implements Au
     @Override
     public boolean updateUser(User user) {
         return userMapper.updateById(user) > 0;
+    }
+
+    @Override
+    public IPage<User> queryUsers(PaginationDTO paginationDTO) {
+        Page<User> page = new Page<>(paginationDTO.getCurrentPage(), paginationDTO.getPageSize());
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        if (paginationDTO.getQueryString() != null && !paginationDTO.getQueryString().isEmpty()) {
+            queryWrapper.like("username", paginationDTO.getQueryString());
+        }
+        queryWrapper.eq("role", "user");
+        return userMapper.selectPage(page, queryWrapper);
     }
 }

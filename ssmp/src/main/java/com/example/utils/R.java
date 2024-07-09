@@ -20,6 +20,7 @@ public class R {
 
     public R(Boolean flag, Object data) {
         this.flag = flag;
+        this.success = flag;
         this.data = data;
     }
 
@@ -35,6 +36,13 @@ public class R {
 
     public R(boolean flag, Integer data, String msg) {
         this.flag = flag;
+        this.data = data;
+        this.msg = msg;
+    }
+
+    public R(boolean flag, Object data, String msg) {
+        this.flag = flag;
+        this.success = flag;
         this.data = data;
         this.msg = msg;
     }

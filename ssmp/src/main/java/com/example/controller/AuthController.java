@@ -125,6 +125,13 @@ public class AuthController {
         return new R(true, userPage);
     }
 
+    @PostMapping("/users/query")
+    public R queryUsers(@RequestBody PaginationDTO paginationDTO) {
+        IPage<User> userPage = authService.queryUsers(paginationDTO);
+        return new R(true, userPage);
+    }
+
+
     //删除用户
     @DeleteMapping("/delete/{id}")
     public R deleteUser(@PathVariable int id) {

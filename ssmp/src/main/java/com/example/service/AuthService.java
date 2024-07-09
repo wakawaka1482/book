@@ -2,6 +2,7 @@ package com.example.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.dto.PaginationDTO;
 import com.example.entity.User;
 
 public interface AuthService extends IService<User> {
@@ -14,4 +15,6 @@ public interface AuthService extends IService<User> {
     IPage<User> getAllUsers(int currentPage, int pageSize);
     boolean removeById(int id);
     boolean updateUser(User user);
+
+    IPage<User> queryUsers(PaginationDTO paginationDTO);
 }
